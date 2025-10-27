@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
     // base name for every file type but as a string
     //fs::path Base(inputFileBaseName); // base name for every file type, i don't think i need this
 
-    fs::path input(inputFileName); // files system for the input file
+    fs::path inputFile(inputFileName); // files system for the input file
+    fs::path input = dirPath / inputFile; // path to the input file
     fs::path TokensFile(inputFileBaseName + ".tokens"); // create a file system path using the output file.
     fs::path Tokens = dirPath / TokensFile;
     fs::path freqFile(inputFileBaseName + ".freq");
@@ -46,11 +47,11 @@ int main(int argc, char *argv[]) {
     std::ofstream(code.string()).close();
     std::ofstream(Tokens.string()).close();
 
-/*
+
     // The next several if-statement make sure that the input file, the directory exist
     // and that the output file is writeable.
-    if (error_type status; (status = regularFileExistsAndIsAvailable(inputFileName)) != NO_ERROR)
-        exitOnError(status, inputFileName);
+    if (error_type status; (status = regularFileExistsAndIsAvailable(input.string())) != NO_ERROR)
+        exitOnError(status, input.string());
 
     if (error_type status; (status = directoryExists(dirName)) != NO_ERROR)
         exitOnError(status, dirName);
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]) {
     //-- Scanner START
     if (error_type status; (status = canOpenForWriting(Tokens.string())) != NO_ERROR)
         exitOnError(status, Tokens.string());
-*/
+
     std::vector<std::string> words;
 
     auto fileToWords = Scanner(input); //create the scanner object that will use the file path that file path
