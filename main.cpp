@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     //-- Scanner START
     if (error_type status; (status = canOpenForWriting(Tokens.string())) != NO_ERROR)
         exitOnError(status, Tokens.string());
-
+*/
     std::vector<std::string> words;
 
     auto fileToWords = Scanner(input); //create the scanner object that will use the file path that file path
