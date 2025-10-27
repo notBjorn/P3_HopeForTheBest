@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     std::ofstream(code.string()).close();
     std::ofstream(Tokens.string()).close();
 
-
+/*
     // The next several if-statement make sure that the input file, the directory exist
     // and that the output file is writeable.
     if (error_type status; (status = regularFileExistsAndIsAvailable(inputFileName)) != NO_ERROR)
@@ -119,5 +119,6 @@ int main(int argc, char *argv[]) {
         pq.print();
         pq.writeFreqFile(freqFileName);
         */
+
     return 0;
 }
