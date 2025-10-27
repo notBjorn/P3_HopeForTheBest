@@ -44,6 +44,7 @@ int main(int argc, char *argv[]) {
     std::ofstream(freq.string()).close();
     std::ofstream(hdr.string()).close();
     std::ofstream(code.string()).close();
+    std::ofstream(Tokens.string()).close();
 
 
     // The next several if-statement make sure that the input file, the directory exist
