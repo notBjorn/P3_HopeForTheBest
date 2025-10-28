@@ -128,27 +128,24 @@ error_type HuffmanTree::encode(const std::vector<std::string> &tokens,
                                std::ostream &os_bits,
                                int wrap_cols) const {
     if (!os_bits) return UNABLE_TO_OPEN_FILE_FOR_WRITING;
-    if (root_ == nullptr) return NO_ERROR; //empty tree is what it is
+    if (root_ == nullptr) return NO_ERROR;
 
-    std::vector<std::pair<std::string, std::string> > codes;
-    assignCodes(codes); // use the function we made earlier to get the codes
-
-    // this is new to me or I have completely forgotten how maps worked I had to use AI and other online resources
-    // to figure out how to use maps
+    std::vector<std::pair<std::string, std::string>> codes;
+    assignCodes(codes);
 
     std::map<std::string, std::string> codebook;
     for (const auto &[word, code]: codes) {
-        codebook[word] = code; // map word to a code i think
+        codebook[word] = code;
     }
 
-    int cols = 0; //tracker for wraping
+    int cols = 0;
     for (const auto &token: tokens) {
-        auto word = codebook.find(token); //find the word in the map
+        auto word = codebook.find(token);
         if (word == codebook.end()) {
             std::cerr << "Error: Word '" << token << "' not found\n";
             return FAILED_TO_WRITE_FILE;
         }
-        std::string code = word->second; // get the code for the word
+        const std::string& code = word->second;
 
         for (char c: code) {
             os_bits << c;
@@ -158,26 +155,25 @@ error_type HuffmanTree::encode(const std::vector<std::string> &tokens,
                 os_bits << '\n';
                 cols = 0;
             }
-
-            if (!os_bits) {
-                return FAILED_TO_WRITE_FILE;
-            }
-        }
-
-        if (cols > 0) {
-            os_bits << '\n';
         }
 
         if (!os_bits) {
             return FAILED_TO_WRITE_FILE;
         }
+    }  // ← End of token loop
 
-        return NO_ERROR;
+    // Add final newline AFTER processing all tokens
+    if (cols > 0) {
+        os_bits << '\n';
     }
 
+    if (!os_bits) {
+        return FAILED_TO_WRITE_FILE;
+    }
 
     return NO_ERROR;
 }
+
 
 //The Desconstructa
 HuffmanTree::~HuffmanTree() {
