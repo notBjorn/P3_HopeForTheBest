@@ -9,14 +9,12 @@
 #include "Scanner.hpp"
 #include "utils.hpp"
 #include "BinSearchTree.hpp"
-#include "PriorityQueue.hpp"
+#include "HuffmanTree.hpp"
 #include <algorithm>
 
 
-
-
 // function that I wiil use compare frequencies before writing the freq file
-bool compareFrequency(const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+bool compareFrequency(const std::pair<std::string, int> &a, const std::pair<std::string, int> &b) {
     if (a.second != b.second) {
         return a.second > b.second;
     }
@@ -24,10 +22,8 @@ bool compareFrequency(const std::pair<std::string, int>& a, const std::pair<std:
 }
 
 
-
 //function that will write the freq file with the correct format
-void writeFreq(std::string filename, std::vector<std::pair<std::string, int> > freqList)
-{
+void writeFreq(std::string filename, std::vector<std::pair<std::string, int> > freqList) {
     std::ofstream out(filename, std::ios::out | std::ios::trunc);
 
     if (!out.is_open()) {
@@ -36,15 +32,15 @@ void writeFreq(std::string filename, std::vector<std::pair<std::string, int> > f
     }
 
     // Write each (word, count) pair: one per line as "word count"
-    for ( auto items : freqList) {
+    for (auto items: freqList) {
         out << std::setw(10) << items.second << ' ' << items.first << '\n';
         if (!out) {
             std::cerr << "Error: Failed while writing to " << filename << "\n";
             return;
         }
     }
+    out.close();
 }
-
 
 
 int main(int argc, char *argv[]) {
@@ -137,17 +133,31 @@ int main(int argc, char *argv[]) {
     // --- Binary Search Tree End
 
 
-    /* -- Frequency/Priority Queue*/
+    // -- Printing The Frequency File
     // Our sorting function
     // Could have copied the way I did it in Priority Queue but that would have been complex for no reason
-    std::sort(frequencyList.begin(), frequencyList.end(), compareFrequency);//our sorting function
+    auto freqSorted = frequencyList; // don't want to change the OG freq file cause that needs to go to Huffman
+    std::sort(freqSorted.begin(), freqSorted.end(), compareFrequency); //our sorting function
 
     if (error_type status; (status = canOpenForWriting(freq.string())) != NO_ERROR)
         exitOnError(status, freq.string());
 
-    writeFreq(freq.string(), frequencyList);
+    writeFreq(freq.string(), freqSorted);
 
     // -- Frequency File Has been made
+
+    // -- Building the Huffman Tree
+    HuffmanTree HFtree = HuffmanTree::buildFromCounts(frequencyList); // static member so call it a bit differently I had forgotten
+    if (error_type status; (status = canOpenForWriting(hdr.string())) != NO_ERROR)
+        exitOnError(status, hdr.string());
+
+
+    std::ofstream writeHdr(hdr);
+    HFtree.writeHeader(writeHdr);
+    writeHdr.close();
+
+    // --hdr file is now written
+
 
     return 0;
 }
