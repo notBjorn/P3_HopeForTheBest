@@ -98,7 +98,6 @@ error_type HuffmanTree::writeHeader(std::ostream &os) const {
     return NO_ERROR;
 }
 
-
 // very similar to what we did in assignCode
 void HuffmanTree::writeHeaderPreorder(const TreeNode *n, std::ostream &os,
                                       std::string &prefix) {
