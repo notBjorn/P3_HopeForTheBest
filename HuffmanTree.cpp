@@ -91,7 +91,6 @@ error_type HuffmanTree::writeHeader(std::ostream &os) const {
 
     std::string prefix;
     writeHeaderPreorder(root_, os, prefix);
-    os << "\n";
 
     if (!os)
         return FAILED_TO_WRITE_FILE;
@@ -121,9 +120,6 @@ void HuffmanTree::writeHeaderPreorder(const TreeNode *n, std::ostream &os,
         writeHeaderPreorder(n->rightSubtree(), os, prefix);
         prefix.pop_back();
     }
-
-
-
 
 }
 
