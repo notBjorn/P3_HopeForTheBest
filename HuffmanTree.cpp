@@ -4,6 +4,8 @@
 
 #include "HuffmanTree.hpp"
 
+#include <map>
+
 HuffmanTree HuffmanTree::buildFromCounts(const std::vector<std::pair<std::string, int> > &counts) {
     //bassically what I did in main for part 2 is now being done inside this function
     //we are basically using the vector that we received from the Binary search tree we created
@@ -107,7 +109,7 @@ void HuffmanTree::writeHeaderPreorder(const TreeNode *n, std::ostream &os,
         os << n->whatWord() << " " << prefix << "\n";
         return;
     }
-    
+
     if (n->leftSubtree() != nullptr) {
         prefix.push_back('0');
         writeHeaderPreorder(n->leftSubtree(), os, prefix);
@@ -119,7 +121,62 @@ void HuffmanTree::writeHeaderPreorder(const TreeNode *n, std::ostream &os,
         writeHeaderPreorder(n->rightSubtree(), os, prefix);
         prefix.pop_back();
     }
+}
 
+
+error_type HuffmanTree::encode(const std::vector<std::string> &tokens,
+                               std::ostream &os_bits,
+                               int wrap_cols) const {
+    if (!os_bits) return UNABLE_TO_OPEN_FILE_FOR_WRITING;
+    if (root_ == nullptr) return NO_ERROR; //empty tree is what it is
+
+    std::vector<std::pair<std::string, std::string> > codes;
+    assignCodes(codes); // use the function we made earlier to get the codes
+
+    // this is new to me or I have completely forgotten how maps worked I had to use AI and other online resources
+    // to figure out how to use maps
+
+    std::map<std::string, std::string> codebook;
+    for (const auto &[word, code]: codes) {
+        codebook[word] = code; // map word to a code i think
+    }
+
+    int cols = 0; //tracker for wraping
+    for (const auto &token: tokens) {
+        auto word = codebook.find(token); //find the word in the map
+        if (word != codebook.end()) {
+            std::cerr << "Error: Word '" << token << "' not found\n";
+            return FAILED_TO_WRITE_FILE;
+        }
+        std::string code = word->second; // get the code for the word
+
+        for (char c: code) {
+            os_bits << c;
+            cols++;
+
+            if (cols >= wrap_cols) {
+                os_bits << '\n';
+                cols = 0;
+            }
+
+            if (!os_bits) {
+                return FAILED_TO_WRITE_FILE;
+            }
+        }
+
+        if (cols > 0) {
+            os_bits << '\n';
+        }
+
+        if (!os_bits) {
+            return FAILED_TO_WRITE_FILE;
+        }
+
+        return NO_ERROR;
+    }
+
+
+    return NO_ERROR;
 }
 
 //The Desconstructa
