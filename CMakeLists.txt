@@ -14,6 +14,6 @@ add_executable(P3_HopeForTheBest
         PriorityQueue.cpp
         PriorityQueue.hpp
         TreeNode.hpp
-       # HuffmanTree.cpp
-        #HuffmanTree.hpp
+        HuffmanTree.cpp
+        HuffmanTree.hpp
 )

@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 class PriorityQueue {
 public:
@@ -32,11 +33,7 @@ public:
 
     // Debug printing
     void print(std::ostream &os = std::cout) const;
-
-    // had to add this to the public interface because there is no other way that i could think of
-    // that would let me write to a file
-    void writeFreqFile(const std::string &filename) const;
-
+    void writeFreqFile(const std::string& filename) const;
 private:
     // Invariant: items_ is kept sorted by HigherPriority(a,b)
     // i.e., (freq desc, key_word asc). Therefore the MIN is items_.back().

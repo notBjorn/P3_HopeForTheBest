@@ -50,7 +50,6 @@ error_type Scanner::tokenize(std::vector<std::string> &words, const std::filesys
             return FAILED_TO_WRITE_FILE;
         }
     }
-    std::cout << "Successfully wrote to " << outputFile << "\n";
 
     if (out.fail()) {
         return ERR_TYPE_NOT_FOUND;

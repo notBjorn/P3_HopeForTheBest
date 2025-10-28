@@ -88,7 +88,9 @@ void PriorityQueue::print(std::ostream& os) const {
     }
 }
 
-void PriorityQueue::writeFreqFile(const std::string& filename) const {
+
+void PriorityQueue::writeFreqFile(const std::string& filename) const
+{
     std::ofstream out(filename, std::ios::out | std::ios::trunc);
 
     if (!out.is_open()) {
@@ -98,7 +100,7 @@ void PriorityQueue::writeFreqFile(const std::string& filename) const {
 
     // Write each (word, count) pair: one per line as "word count"
     for (const auto* node : items_) {
-        out << node->whatWord() << " " << node->howMany() << '\n';
+        out << std::setw(10) << node->whatWord() << " " << node->howMany() << '\n';
         if (!out) {
             std::cerr << "Error: Failed while writing to " << filename << "\n";
             return;

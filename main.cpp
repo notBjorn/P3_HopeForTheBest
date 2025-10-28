@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <filesystem>
 #include <string>
@@ -10,6 +11,24 @@
 #include "BinSearchTree.hpp"
 #include "PriorityQueue.hpp"
 
+void writeFreq(std::string filename, std::vector<std::pair<std::string, int> > freqList)
+{
+    std::ofstream out(filename, std::ios::out | std::ios::trunc);
+
+    if (!out.is_open()) {
+        std::cerr << "Error: Unable to open file for writing: " << filename << "\n";
+        return;
+    }
+
+    // Write each (word, count) pair: one per line as "word count"
+    for ( auto items : freqList) {
+        out << std::setw(10) << items.second << ' ' << items.first << '\n';
+        if (!out) {
+            std::cerr << "Error: Failed while writing to " << filename << "\n";
+            return;
+        }
+    }
+}
 
 int main(int argc, char *argv[]) {
     // std::cout << "the program ran\n";
@@ -40,12 +59,6 @@ int main(int argc, char *argv[]) {
     fs::path hdr = dirPath / hdrFile;
     fs::path codeFile(inputFileBaseName + ".code");
     fs::path code = dirPath / codeFile;
-
-// just testing if the files are even being created
-    std::ofstream(freq.string()).close();
-    std::ofstream(hdr.string()).close();
-    std::ofstream(code.string()).close();
-    std::ofstream(Tokens.string()).close();
 
 
     // The next several if-statement make sure that the input file, the directory exist
@@ -102,7 +115,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Total tokens: " << totalTokens << "\n";
     std::cout << "Min frequency: " << minFreq << "\n";
     std::cout << "Max frequency: " << maxFreq << "\n";
-    /*
+
         // Convert frequencyList to vector<TreeNode*> for PriorityQueue
         std::vector<TreeNode*> leaves;
         leaves.reserve(frequencyList.size());
@@ -111,15 +124,16 @@ int main(int argc, char *argv[]) {
             leaves.push_back(new TreeNode(word, count));
         }
 
-        const std::string freqFileName = dirName + "/" + inputFileBaseName + ".freq";
-        if (error_type status; (status = canOpenForWriting(freqFileName)) != NO_ERROR)
-            exitOnError(status, freqFileName);
+
+        if (error_type status; (status = canOpenForWriting(freq.string())) != NO_ERROR)
+            exitOnError(status, freq.string());
 
         PriorityQueue pq(leaves);
 
-        pq.print();
-        pq.writeFreqFile(freqFileName);
-        */
+        pq.writeFreqFile(freq.string());
+
+
+
 
     return 0;
 }
