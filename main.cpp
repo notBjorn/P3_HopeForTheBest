@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
         exitOnError(status, inputFileName);
 
     if (error_type status; (status = fileToWords.tokenize(words, Tokens.string())) != NO_ERROR)
-        exitOnError(status, Tokens.string());
+        exitOnError(status, TokensFile.string());
     //-- Scanner END
 
     // --- Binary Search Tree Begin
@@ -140,24 +140,37 @@ int main(int argc, char *argv[]) {
     std::sort(freqSorted.begin(), freqSorted.end(), compareFrequency); //our sorting function
 
     if (error_type status; (status = canOpenForWriting(freq.string())) != NO_ERROR)
-        exitOnError(status, freq.string());
+        exitOnError(status, freqFile.string());
 
     writeFreq(freq.string(), freqSorted);
 
     // -- Frequency File Has been made
 
     // -- Building the Huffman Tree
-    HuffmanTree HFtree = HuffmanTree::buildFromCounts(frequencyList); // static member so call it a bit differently I had forgotten
+    HuffmanTree HFtree = HuffmanTree::buildFromCounts(frequencyList);
+    // static member so call it a bit differently I had forgotten
     if (error_type status; (status = canOpenForWriting(hdr.string())) != NO_ERROR)
-        exitOnError(status, hdr.string());
+        exitOnError(status, hdrFile.string());
 
 
     std::ofstream writeHdr(hdr);
-    HFtree.writeHeader(writeHdr);
+    if (error_type status; (status = HFtree.writeHeader(writeHdr)) != NO_ERROR)
+        exitOnError(status, hdr.string());
+    writeHdr.close();
+
     writeHdr.close();
 
     // --hdr file is now written
 
 
+    if (error_type status; (status = canOpenForWriting(code.string())) != NO_ERROR)
+        exitOnError(status, codeFile.string());
+
+    std::ofstream writeCode(code);
+
+    if (error_type status; (status = HFtree.encode(words, writeCode, 80)) != NO_ERROR)
+        exitOnError(status, code.string());
+
+    writeCode.close();
     return 0;
 }
