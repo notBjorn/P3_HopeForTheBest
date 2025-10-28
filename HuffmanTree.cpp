@@ -46,3 +46,17 @@ void HuffmanTree::assignCodes(std::vector<std::pair<std::string, std::string> > 
     //
 
 }
+
+//The Desconstructa
+HuffmanTree::~HuffmanTree() {
+    destroy(root_);
+}
+
+
+//Compiler was screaming about the destructer so I had to make one quick lets see if it works
+void HuffmanTree::destroy(TreeNode* n) noexcept {
+    if (n == nullptr) return;
+    destroy(n->leftSubtree());
+    destroy(n->rightSubtree());
+    delete n;
+}
