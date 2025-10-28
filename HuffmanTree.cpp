@@ -144,7 +144,7 @@ error_type HuffmanTree::encode(const std::vector<std::string> &tokens,
     int cols = 0; //tracker for wraping
     for (const auto &token: tokens) {
         auto word = codebook.find(token); //find the word in the map
-        if (word != codebook.end()) {
+        if (word == codebook.end()) {
             std::cerr << "Error: Word '" << token << "' not found\n";
             return FAILED_TO_WRITE_FILE;
         }
