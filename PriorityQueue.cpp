@@ -100,7 +100,7 @@ void PriorityQueue::writeFreqFile(const std::string& filename) const
 
     // Write each (word, count) pair: one per line as "word count"
     for (const auto* node : items_) {
-        out << std::setw(10) << node->whatWord() << " " << node->howMany() << '\n';
+        out << std::setw(10) << node->howMany() << " " << node->whatWord() << '\n';
         if (!out) {
             std::cerr << "Error: Failed while writing to " << filename << "\n";
             return;
